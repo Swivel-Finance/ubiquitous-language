@@ -15,7 +15,8 @@ This is an Entity, stored off chain, possessing the following properties:
 * Nonce - @jules
 
 ### Volume
-All Orders expose an amount which can be filled, wholly or partially, by an Agreement.
+All Orders expose an amount which can be filled, wholly or partially, by an Agreement. This will be represented by
+either the principal or interest, depending on whether the Order is floating or fixed.
 
 ### Taker
 This will be the public key of the owner of any Agreement created to fill an Order. Taker can be used in
@@ -76,7 +77,7 @@ An Entity, stored on chain, with the following properties:
 Emitted on chain upon the establishment of any Agreement. Publishes both OrderKey and AgreementKey
 
 ### Volume
-The amount of an Order's volume this agreement is filling depending on floating or fixed side it is present as Principal or Interest.
+The amount of an Order's volume this agreement is filling. Depending on floating or fixed side it is present as Principal or Interest.
 
 ### Release
 After the term of an Agreement has passed it may be released, paying amounts owed to all parties involved. @jules...
