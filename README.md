@@ -20,7 +20,7 @@ All Orders expose an amount which can be filled, wholly or partially, by an Agre
 either the principal or interest, depending on whether the Order is floating or fixed.
 
 ### Side
-Every order must be either fixed or floating side, designating whether a user is attempting to take a fixed-rate lending position, or a floating-side speculative (leveraged) position.
+A term used on occasion to designate whether a user is attempting to take a fixed-rate lending position, or a floating-side speculative (leveraged) position.
 
 ### Taker
 This will be the public key of the owner of any Agreement created to fill an Order. Taker can be used in
