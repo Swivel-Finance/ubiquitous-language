@@ -4,7 +4,7 @@ A domain driven, living, published language for the Swivel Finance Protocol.
 ## Order
 This is an Entity, stored off chain, possessing the following properties:
 
-* Key - Keccack hash of (wallet address,session(or address based?@rob) nonce,time). May also be referred to as _OrderKey_ when needed to differentiate from an Agreement's key.
+* Key - Keccack hash of (wallet address,session nonce(or address based?@rob),time). May also be referred to as _OrderKey_ when needed to differentiate from an Agreement's key.
 * Maker - Public key of this Order's creator
 * Underlying - Ethereum address of a deployed Erc20 token
 * Floating - Boolean indicating if this Order is floating or fixed side
@@ -58,7 +58,7 @@ An Order is only valid if non-cancelled, non-expired and passing signature valid
 ## Agreement
 An Entity, stored on chain, with the following properties:
 
-* Key - Keccack hash of (wallet address,session(or address based?@rob) nonce,time). May also be referred to as _AgreementKey_ when needed to differentiate from an Order key.
+* Key - Keccack hash of (wallet address,session nonce(or address based?@rob),time). May also be referred to as _AgreementKey_ when needed to differentiate from an Order key.
 * Maker - Public key of the creator of an Order this Agreement is filling
 * Taker - Public key of this Agreement's creator
 * Underlying - Ethereum address of a deployed Erc20 token
@@ -79,7 +79,7 @@ The amount of an Order's volume this agreement is filling. Depending on floating
 After the lending term of an Agreement has passed it may be released, paying amounts owed to all parties involved.
 
 #### Release Event
-mitted on chain upon the release of an Agreement. Publishes OrderKey and AgreementKey
+Emitted on chain upon the release of an Agreement. Publishes OrderKey and AgreementKey
 
 ### Yield
 The amount of interest an agreement has generated in terms of a percentage.
