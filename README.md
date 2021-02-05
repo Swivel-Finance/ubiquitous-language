@@ -56,7 +56,7 @@ Any use of these terms, specifically _domain_ should be prefixed with EIP-712 to
 Obviously our implementation of Signature and Components are tightly coupled to the EIP-712 standard.
 
 ### Valid
-An Order is only valid if non-cancelled, non-expired, not-filled and passing signature validation.
+An Order is only valid if non-cancelled, non-expired, not-fully-filled and passing signature validation.
 
 ## Agreement
 An Entity, stored on chain, with the following properties:
