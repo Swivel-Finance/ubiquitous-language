@@ -4,7 +4,7 @@ A domain driven, living, published language for the Swivel Finance Protocol.
 ## Order
 This is an Entity, stored off chain, possessing the following properties:
 
-* Key - Keccack hash of (wallet address,session nonce(or address based?@rob),time). May also be referred to as _OrderKey_ when needed to differentiate from an Agreement's key.
+* Key - Keccack hash of (wallet address,nonce,time). May also be referred to as _OrderKey_ when needed to differentiate from an Agreement's key.
 * Maker - Public key of this Order's creator
 * Underlying - Ethereum address of a deployed Erc20 token
 * Floating - Boolean indicating if this Order is floating or fixed side
@@ -13,7 +13,9 @@ This is an Entity, stored off chain, possessing the following properties:
 * Duration - Timestamp indicating the the length of time this Order is valid. Used to calculate an Agreement's release.
 * Expiry - Timestamp marking this Order's expiration
 
-(should we explicitly store "rate" off-chain? The alternative is just store principal/interest and it is implied.)@rob
+### Notes (@rob)
+Should we explicitly store "rate" off-chain? This wouldn't be signed, just for convenience. The alternative is just store principal/interest and it is implied.
+Should we explicitly store "time" off-chain? This similarly wouldn't be signed.
 
 ### Volume
 All Orders expose an amount which can be filled, wholly or partially, by an Agreement. This will be represented by
@@ -61,7 +63,7 @@ An Order is only valid if non-cancelled, non-expired, not-fully-filled and passi
 ## Agreement
 An Entity, stored on chain, with the following properties:
 
-* Key - Keccack hash of (wallet address,session nonce(or address based?@rob),time). May also be referred to as _AgreementKey_ when needed to differentiate from an Order key.
+* Key - Keccack hash of (wallet address,nonce,time). May also be referred to as _AgreementKey_ when needed to differentiate from an Order key.
 * Maker - Public key of the creator of an Order this Agreement is filling
 * Taker - Public key of this Agreement's creator
 * Underlying - Ethereum address of a deployed Erc20 token
