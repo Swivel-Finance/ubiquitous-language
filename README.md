@@ -60,6 +60,8 @@ Obviously our implementation of Signature and Components are tightly coupled to 
 ### Valid
 An Order is only valid if non-cancelled, non-expired, not-fully-filled and passing signature validation.
 
+---
+
 ## Agreement
 An Entity, stored on chain, with the following properties:
 
@@ -126,3 +128,8 @@ Over time this ratio increases such that when "Release" is called, the differenc
 
 #### CToken is Erc20
 Note that all functionality of the Erc20 standard is available to the Compound Token. Use _CErc20_ or _cToken_ to specify.
+
+---
+
+## Bond (Working Name)
+The bucket of agreements associated with a given orderKey or agreementKey. This allows the ability to establish the entirety of a given position that may be split across a number of agreements.
