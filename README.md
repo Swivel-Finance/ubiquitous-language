@@ -77,7 +77,7 @@ An Entity, stored on chain, with the following properties:
 Emitted on chain upon the establishment of any Agreement. Publishes both OrderKey and AgreementKey
 
 ### Volume
-The amount of an Order's volume this agreement is filling. Depending on floating or fixed side it is present as Principal or Interest.
+The amount of an order liquidity this agreement is filling. Depending on whether the order filled is Fixed or Floating side, volume represents Principal or Interest.
 
 ### Release
 After the lending term of an Agreement has passed it may be released, paying amounts owed to all parties involved.
