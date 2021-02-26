@@ -13,9 +13,6 @@ This is an Entity, stored off chain, possessing the following properties:
 * Duration - Timestamp indicating the the length of time this Order is valid. Used to calculate an Agreement's release.
 * Expiry - Timestamp marking this Order's expiration
 
-### Notes (@rob)
-Should we explicitly store "rate" off-chain? This wouldn't be signed, just for convenience. The alternative is just store principal/interest and it is implied.
-Should we explicitly store "time" off-chain? This similarly wouldn't be signed.
 
 ### Volume
 All Orders expose an amount which can be filled, wholly or partially, by an Agreement. This will be represented by
