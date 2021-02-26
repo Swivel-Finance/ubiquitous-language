@@ -82,6 +82,9 @@ The amount of an order liquidity this agreement is filling. Depending on whether
 ### Release
 After the lending term of an Agreement has passed it may be released, paying amounts owed to all parties involved.
 
+### Active
+The descriptive state of an agreement that has not yet been released.
+
 #### Release Event
 Emitted on chain upon the release of an Agreement. Publishes OrderKey and AgreementKey
 
