@@ -14,7 +14,7 @@ This is an Entity, stored off chain, possessing the following properties:
 * Expiry - Timestamp marking this Order's expiration
 
 ### Asset
-A currency, Token, or other tradable object. In our context `asset` refers to DAI, USDC, USDT.
+A currency, token, or other tradable object. In our context `asset` refers to DAI, USDC, USDT.
 
 ### Volume
 All Orders expose an amount which can be filled, wholly or partially, by an Agreement. This will be represented by
