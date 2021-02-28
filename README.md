@@ -8,8 +8,8 @@ This is an Entity, stored off chain, possessing the following properties:
 * Maker - Public key of this Order's creator
 * Underlying - Ethereum address of a deployed Erc20 token
 * Floating - Boolean indicating if this order is floating or fixed side
-* Principal - Avalailable volume to be filled in a floating side order. When fixed this amount is determined by the interest / rate.
-* Interest - Avalailable volume to be filled in a fixed side order.  When floating this amount is determined by the rate * principal.
+* Principal - Volume to be filled in a floating side order. The amount of currency lent at a fixed-rate.
+* Interest - Volume to be filled in a fixed side order.  The amount of currency necessary to back a fixed-rate.
 * Duration - Timestamp indicating the the length of time this order is valid. Used to calculate an Agreement's release.
 * Expiry - Timestamp marking this order's expiration
 
@@ -21,7 +21,7 @@ An asset-duration (underlying-duration) pairing that identifies which orderbook 
 
 ### Volume
 All orders expose an amount which can be filled, wholly or partially, by an Agreement. This will be represented by
-either the principal or interest, depending on whether the Order is floating or fixed.
+either the principal or interest, depending on whether the order is floating or fixed.
 
 ### Side
 A term used on occasion to designate whether an order is `fixed`, `floating` side.
