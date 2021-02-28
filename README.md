@@ -4,20 +4,23 @@ A domain driven, living, published language for the Swivel Finance Protocol.
 ## Order
 This is an Entity, stored off chain, possessing the following properties:
 
-* Key - Keccack hash of (wallet address,nonce,time). May also be referred to as _OrderKey_ when needed to differentiate from an Agreement's key.
+* Key - Keccack hash of (wallet address,nonce,time). May also be referred to as _orderKey_ when needed to differentiate from an Agreement's key.
 * Maker - Public key of this Order's creator
 * Underlying - Ethereum address of a deployed Erc20 token
-* Floating - Boolean indicating if this Order is floating or fixed side
+* Floating - Boolean indicating if this order is floating or fixed side
 * Principal - Avalailable volume to be filled in a floating side order. When fixed this amount is determined by the interest / rate.
 * Interest - Avalailable volume to be filled in a fixed side order.  When floating this amount is determined by the rate * principal.
-* Duration - Timestamp indicating the the length of time this Order is valid. Used to calculate an Agreement's release.
-* Expiry - Timestamp marking this Order's expiration
+* Duration - Timestamp indicating the the length of time this order is valid. Used to calculate an Agreement's release.
+* Expiry - Timestamp marking this order's expiration
 
 ### Asset
 A currency, token, or other tradable object. In our context `asset` refers to DAI, USDC, USDT.
 
+### Market (Market-Pair)
+An asset-duration (underlying-duration) pairing that identifies which orderbook / instrument is being used. E.g. DAI-12MONTH or 0xD0f2390b9CCd0A9F6160E4Ab584A4Fb51f76bF14 - 31536000
+
 ### Volume
-All Orders expose an amount which can be filled, wholly or partially, by an Agreement. This will be represented by
+All orders expose an amount which can be filled, wholly or partially, by an Agreement. This will be represented by
 either the principal or interest, depending on whether the Order is floating or fixed.
 
 ### Side
@@ -78,9 +81,6 @@ An Entity, stored on chain, with the following properties:
 #### Initiate Event
 Emitted on chain upon the establishment of any Agreement. Publishes both OrderKey and AgreementKey
 
-### Volume
-The amount of an order liquidity this agreement is filling. Depending on whether the order filled is Fixed or Floating side, volume represents Principal or Interest.
-
 ### Release
 After the lending term of an Agreement has passed it may be released, paying amounts owed to all parties involved.
 
@@ -133,5 +133,21 @@ Note that all functionality of the Erc20 standard is available to the Compound T
 
 ---
 
-## Bond (Working Name)
-The bucket of agreements associated with a given orderKey or agreementKey. This allows the ability to establish the entirety of a given position that may be split across a number of agreements.
+## Bond 
+A bucket of agreements associated with a given orderKey or agreementKey. 
+
+### Market (Market-Pair)
+An `asset`-`duration` (underlying-duration) pairing that identifies which orderbook / instrument the bond originated from. E.g. DAI-12MONTH or 0xD0f2390b9CCd0A9F6160E4Ab584A4Fb51f76bF14 - 31536000
+
+### Volume
+The total amount of `asset` under a given bond. Depending on whether the bond is `fixed` or `floating`, volume is the sum of all `principal` or `interest` across each agreement.
+
+### Rate (Effective Rate)
+The bond's effective `rate` averaged across each agreement. Depending on whether the bond is `fixed` or `floating`, effective rate is calculated with respect to either `principal` or `interest`.
+
+Calculated as the sum of each agreement's (`agreement volume `/`bond volume`) * `rate`)
+
+effectiveRate = SUM(`agreement volume `/`bond volume`) * `rate`)
+
+### Release
+Timestamp of the agreement with the with the highest `release` timestamp. Represents the time at which *all* agreements within the bond can be released.
