@@ -145,9 +145,12 @@ The total amount of `asset` under a given bond. Depending on whether the bond is
 ### Rate (Effective Rate)
 The bond's effective `rate` averaged across each agreement. Depending on whether the bond is `fixed` or `floating`, effective rate is calculated with respect to either `principal` or `interest`.
 
-Calculated as the sum of each agreement's (`agreement volume `/`bond volume`) * `rate`)
+Calculated as the sum of each agreement's (`agreement volume `/`bond volume`) * `agreement rate`)
 
-effectiveRate = SUM(`agreement volume `/`bond volume`) * `rate`)
+e.g. 
+If (`agreement floating` == false) {
+  effectiveRate = SUM(`agreement principal `/`bond volume`) * `agreement principal`)
+}
 
 ### Release
 Timestamp of the agreement with the with the highest `release` timestamp. Represents the time at which *all* agreements within the bond can be released.
