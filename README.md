@@ -148,8 +148,11 @@ The bond's effective `rate` averaged across each agreement. Depending on whether
 Calculated as the sum of each agreement's (`agreement volume `/`bond volume`) * `agreement rate`)
 
 e.g. 
+
 If (`agreement floating` == false) {
+
   effectiveRate = SUM(`agreement principal `/`bond volume`) * `agreement principal`)
+  
 }
 
 ### Release
