@@ -24,7 +24,7 @@ All orders expose an amount which can be filled, wholly or partially, by an Agre
 either the principal or interest, depending on whether the Order is floating or fixed.
 
 ### Side
-A term used on occasion to designate whether a user is attempting to take a fixed-rate lending position, or a floating-side speculative (leveraged) position.
+A term used on occasion to designate whether an order is `fixed`, `floating` side.
 
 ### Taker
 This will be the public key of the owner of any Agreement created to fill an Order. Taker can be used in
@@ -139,19 +139,22 @@ A bucket of agreements associated with a given orderKey or agreementKey.
 ### Market (Market-Pair)
 An `asset`-`duration` (underlying-duration) pairing that identifies which orderbook / instrument the bond originated from. E.g. DAI-12MONTH or 0xD0f2390b9CCd0A9F6160E4Ab584A4Fb51f76bF14 - 31536000
 
+### Side
+Indicates whether the bond is `fixed` and is lending `principal`, or is `floating` and is paying `interest`.
+
 ### Volume
 The total amount of `asset` under a given bond. Depending on whether the bond is `fixed` or `floating`, volume is the sum of all `principal` or `interest` across each agreement.
 
 ### Rate (Effective Rate)
-The bond's effective `rate` averaged across each agreement. Depending on whether the bond is `fixed` or `floating`, effective rate is calculated with respect to either `principal` or `interest`.
+The bond's effective `rate`, averaged across each agreement. Depending on whether the bond is `fixed` or `floating`, effective rate is calculated with respect to either `principal` or `interest`.
 
-Calculated as the sum of each agreement's (`agreement volume `/`bond volume`) * `agreement rate`)
+Calculated as the sum of each agreement's ( `agreement volume` / `bond volume` ) * `agreement rate` )
 
 e.g. 
 
 If (`agreement floating` == false) {
 
-  effectiveRate = SUM(`agreement principal `/`bond volume`) * `agreement principal`)
+   effectiveRate = SUM(`agreement principal`/`bond volume`) * `agreement principal`)
   
 }
 
