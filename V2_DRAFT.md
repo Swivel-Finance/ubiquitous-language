@@ -2,10 +2,10 @@
 
 ## Table of Contents
 1. [Shared Language](#shared-language)
-2. [UI Language] (#ui-language)
-3. [Technical Language] (#technical-language)
-4. [Compund Language] (#compound-language)
-5. [Blockchain Terms] (#blockchain-terms)
+2. [UI Language](#ui-language)
+3. [Technical Language](#technical-language)
+4. [Compund Language](#compound-language)
+5. [Blockchain Terms](#blockchain-terms)
 
 ## Conventions
 Terms are defined within their specified contexts. If encountered in a context but not explicitly re-defined or clarified for that context, the term is assumed to have the Shared Language definition.
