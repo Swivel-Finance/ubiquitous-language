@@ -85,6 +85,7 @@ Placing an `Order` at a determined price for the given order type and `Market`. 
 The current state of your balance of `Underlying` and `Token` assets, for all active `Markets` you participate in.
 
 <hr>
+
 ## Technical Language
 These term definitions are understood in the context of Swivel's technical stack. UI terms above apply when seen in technical usage, unless re-defined within this Technical context.
 
