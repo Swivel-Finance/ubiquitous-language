@@ -1,9 +1,16 @@
 # Swivel Ubiquitous Language
-## TOC
-1. Shared Language
-2. Front End Language
-3. Back End Language
-4. Blockchain Terms
+
+## Table of Contents
+1. [Shared Language](#shared-language)
+2. [Front End Language] (#front-end-language)
+3. [Back End Language] (#back-end-language)
+4. [Compund Language] (#compound-language)
+5. [Blockchain Terms] (#blockchain-terms)
+
+## Conventions
+Terms are defined within their specified contexts. If encountered in a context but not explicitly re-defined or clarified for that context, the term is assumed to have the Shared Language definition.
+
+Defined terms that occur within other terms' definition are indicated using title case and `Markup` formatting.
 
 ## Shared Language
 These terms fulfill the same meaning across the Swivel stack, although any variation or further clarification will be noted within specific contexts.
