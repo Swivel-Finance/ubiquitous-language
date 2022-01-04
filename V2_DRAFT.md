@@ -2,8 +2,8 @@
 
 ## Table of Contents
 1. [Shared Language](#shared-language)
-2. [Front End Language] (#front-end-language)
-3. [Back End Language] (#back-end-language)
+2. [UI Language] (#ui-language)
+3. [Technical Language] (#technical-language)
 4. [Compund Language] (#compound-language)
 5. [Blockchain Terms] (#blockchain-terms)
 
@@ -192,10 +192,11 @@ If (`agreement floating` == false) {
 
 
 <hr>
+
 ## Compound Language
 Some terms used in the context of the Compound protocol, and how Swivel utilizes it.
 
-## Compound Token
+### Compound Token
 A CErc20 at an address passed to the constructor of the Swivel contract at deployment.
 
 Pass an array of underlying token addresses + array of CERC20 addresses to create a public mapping of address -> address 
@@ -221,6 +222,7 @@ Over time this ratio increases such that when "Release" is called, the differenc
 Note that all functionality of the Erc20 standard is available to the Compound Token. Use _CErc20_ or _cToken_ to specify.
 
 <hr>
+
 ## BlockChain Terms
 #### Erc20
 - Erc20 is a token contract standard on the Ethereum Virtual Machine (EVM) that defines mechanics and best practices for fungible, transferrable digital tokens. 
