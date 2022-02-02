@@ -4,19 +4,20 @@
 1. [Shared Language](#shared-language)
 2. [UI Language](#ui-language)
 3. [Technical Language](#technical-language)
-4. [Compund Language](#compound-language)
-5. [Blockchain Terms](#blockchain-terms)
+4. [Compound Language](#compound-language)
+5. [Web3 Terms](#web3-terms)
+6. [Finance Terms](#finance-terms)
 
 ## Conventions
 Terms are defined within their specified contexts. If encountered in a context but not explicitly re-defined or clarified for that context, the term is assumed to have the Shared Language definition.
 
-Defined terms that occur within other terms' definition are indicated using title case and `Markup` formatting.
+Ubiquitous terms that occur within other terms' definitions are indicated using title case and `Markup` formatting.
 
 ## Shared Language
 These terms fulfill the same meaning across the Swivel stack, although any variation or further clarification will be noted within specific contexts.
 
 #### Asset
-A currency, token, or other tradable object. In Swivel, `asset` refers to `Underlying` currency or Tokens.
+A currency, token, or other tradable object. In Swivel, `Asset` refers to `Underlying` currency or a `Token`.
 
 #### Underlying
 The lending currency of a given `Market`, typically a `Stable Coin` or `Token`.
@@ -45,44 +46,55 @@ All orders expose an amount which can be filled, wholly or partially, by an `Agr
 #### Yield
 The amount of interest an `Agreement` has generated, expressed in terms of a percentage.
 
-  
-#### Principal
-#### Premium
+#### Liquidity Provider
+On Swivel's orderbook-based protocol, Liquidity Providers are `Market Makers`.
+
+#### Liquidity Incentives
+Swivel incentivizes liquidity by providing token rewards only to those `Liquidity Providers` who's orders are `filled`.
+
 
 <hr>
 
 ## UI Language
 These term definitions are understood in the context of the public interface at Swivel.finance.
 
-### Lend
+#### Lend
 You can lend `Underlying` assets by placing a `Fixed Yield` order.
 
-### Order
+#### Order
 In the Front End context, an Order is any valid `Market Order` or `Limit Order` placed on a given `Market` to lend, buy or sell `Underlying` or `Token` assets.
 
-### Orderbook
+#### Orderbook
 The table of valid, open `Orders` for a given `Market`
 
-### Fill
+#### Fill
 Fill orders are `Orderbook` Orders that fulfill your `Market Order` or `Limit Order` partially or in full.
 
-### Fixed Yield
+#### Fixed Yield
 A Fixed Yield order uses the Swivel protocol to give the user an immediate yield for lending `Underlying` assets. When a Fixed Yield order is filled, Swivel mints an equal amount of `nToken` and `zcToken` on the `Underlying`, leaving the `zcToken` in your balance and immediately selling the `nTokens` on the `Orderbook`, and returning the `Underlying` to your `Balance`.
 
-### Amplified Yield (deprecated: 'Floating')
+#### Amplified Yield (deprecated: 'Floating')
 An Amplified Yield order purchases `nTokens` from the marketplace and adds them to your `Balance`, where they will continue to earn a variable yield until the given `Market` matures.
 
-### Sell
+#### Sell
 You can sell your `nTokens` or `zcTokens` back to the `Orderbook` at any time with a Sell order.
 
-### Market Order
+#### Market Order
 Placing an `Order` as a `Taker`, transacting at the best available price on the `Orderbook`.
 
-### Limit Order
+#### Limit Order
 Placing an `Order` at a determined price for the given order type and `Market`. `Valid`, unfilled `Limit Orders` appear in your Open Limit Orders view. Depending on `Order` size and `Orderbook` volume, Limit Orders may be filled partially over an undetermined amount of time.
 
-### Position
+#### Position
 The current state of your balance of `Underlying` and `Token` assets, for all active `Markets` you participate in.
+
+_principal and premium definitions need specific breakdowns in order to make a logical mapping to how we are using them in the UI_  
+#### Principal
+Depending on the action taken, Principal in Swivel can either be the original sum committed to the purchase of assets (e.g. purchase 10 DAI worth of Fixed Yield), or the amount of asset sold for a Premium (e.g. sell 10 nDAI for .1089 per nDAI, => 1.089 DAI)
+
+#### Premium
+Depending on the action taken, Premium can either be the earnings from buying Fixed Yield or the 
+
 
 <hr>
 
@@ -102,7 +114,7 @@ UI analogs: *`Order`*, *`Market Order`,* *`Limit Order`*
 * **Duration** - Timestamp indicating the the length of time this order is valid. Used to calculate an Agreement's release.
 * **Expiry** - Timestamp marking this order's expiration
 
-## Agreement
+### Agreement
 An Entity, stored on chain.
 
 ##### Agreement Struct:
@@ -112,7 +124,7 @@ An Entity, stored on chain.
 * **Underlying** - Ethereum address of a deployed Erc20 token
 * **Floating** - Boolean indicating if this Agreement is Floating or Fixed side
 * **Released** - Boolean indicating if this Agreement has been released or not
-* **Principal** - Avalailable volume to be filled in a floating side order. When fixed this amount is determined by the interest / rate.
+* **Principal** - Avalailable volume to be filled in a floating side order. When fixed, this amount is determined by the interest / rate.
 * **Interest** - Avalailable volume to be filled in a fixed side order.  When floating this amount is determined by the rate * principal.
 * **Duration** - Timestamp indicating the the length of time this Agreement is valid
 * **Release** - Timestamp marking this Agreement's term maturation. Calculated from the Duration of the Order this is filling
@@ -168,16 +180,16 @@ Terms such as transfer, transfers  and transfer from when referencing specific f
 #### Side
 Indicates whether the bond is `fixed` and is lending `principal`, or is `floating` and is paying `interest`.
 
-### Agreement
-
-### Exit
+#### Exit
 Boolean value indicating that an `Order` is Selling `nTokens` of `zcTokens` back to the `Orderbook`.
 
-### Vault
-### Initiate
+#### Vault
+
+
+#### Initiate
 Boolean value indicating that an order is `Lending` new `Underlying` assets to the protocol, minting new `nTokens` and `zcTokens` into the `Vault`.
 
-### Rate (Effective Rate)
+#### Rate (Effective Rate)
 The bond's (deprecated?) effective rate, averaged across each agreement. Depending on whether the bond is `fixed` or `floating` (UI: '`amplified`)', effective rate is calculated with respect to either `principal` or `interest`.
 
 Calculated as the sum of each agreement's ( `agreement volume` / `bond volume` ) * `agreement rate` )
@@ -197,22 +209,22 @@ If (`agreement floating` == false) {
 ## Compound Language
 Some terms used in the context of the Compound protocol, and how Swivel utilizes it.
 
-### Compound Token
+#### Compound Token
 A CErc20 at an address passed to the constructor of the Swivel contract at deployment.
 
 Pass an array of underlying token addresses + array of CERC20 addresses to create a public mapping of address -> address 
 
-### Mint
+#### Mint
 When an agreement is initiated and after funds have been sent to the Swivel contract, cTokens are minted on the Compound protocol to generate interest. 
 
 The number of cTokens minted is calculated in terms of the underlying token consumed/transferred rather than the # of cTokens to be minted.
 
-### Redeem
+#### Redeem
 When an agreement has completed and "Release" is called, cTokens are redeemed on the Compound protocol to return an agreement's underlying deposit as well as the interest generated over the agreement's lending term. 
 
 The number of cTokens redeemed is calculated in terms of the underlying token to be returned, rather than the # of cTokens to be consumed/transferred.
 
-### Exchange Rate
+#### Exchange Rate
 Exchange Rate refers to the 2e26+ uint returned from the Compound Protocol by exchangeRateCurrent().
 
 In order to calculate the interest generated by an agreement, the current ratio of underlying:cToken is stored in each agreement upon its initiation(exchangeRateCurrent()). 
@@ -224,8 +236,41 @@ Note that all functionality of the Erc20 standard is available to the Compound T
 
 <hr>
 
-## BlockChain Terms
+## Web3 Terms
+
 #### Erc20
-- Erc20 is a token contract standard on the Ethereum Virtual Machine (EVM) that defines mechanics and best practices for fungible, transferrable digital tokens. 
-#### Stable Coins
-- Stable coins are a class of Erc20 tokens that maintain a consistent peg to the value of the US Dollar. For example DAI, USDC.
+Erc20 is a token contract standard on the Ethereum Virtual Machine (EVM) that defines mechanics and best practices for fungible, transferrable digital tokens. 
+
+#### Stable Coin
+Stable coins are a class of Erc20 tokens that maintain a consistent peg to the value of the US Dollar. For example DAI, USDC.
+
+#### L2
+A Layer 2 network that facilitates operational and cost benefits to using the Layer 1 network it resolves to. E.g. Arbitrum is an `L2` solution for the `Ethereum` Blockchain.
+
+#### Progressive Decentralization
+Long term strategy of a Web3 project to gradually evolve from a more centralized initial governance structure to a distributed governance protocol that has no single point of failure or over-weighted influence.
+
+#### Tokenomics
+Blanket term for the myriad utilizations of blockchain `Tokens` (`ERC20` or other fungible smart contract standards) to achieve a project's stated goals, such as decentralized `Governance`. 
+
+#### Governance
+The act of managing collective decision-making in order to optimize funds and operations.
+
+<hr>
+
+## Finance Terms
+
+#### Yield Strategy
+An individual or organization's activity or collection of financial instruments to obtain yield, and the subject of `Rate Profile Optimization`. 
+
+#### Rate Profile Optimization
+Set of activities performed by an individual or organization to obtain lower cost and/or lower risk on their borrowing/capital seeking, or higher return at acceptable levels of risk for their lending/investment.
+
+#### Liquidity
+The efficiency or ease with which an asset or security can be converted into ready cash without affecting its market price. The most liquid asset of all is cash itself.
+
+#### Market Maker
+An individual or organization that stands ready to buy and sell assets on a regular and continuous basis at a publicly quoted price.
+
+#### Capital Efficiency
+In traditional terms Capital Efficiency refers to the ratio of capital expenditures to production additions. In DeFi applications, this is considerably affected by the accumulation of gas fees required to transact on most blockchains.

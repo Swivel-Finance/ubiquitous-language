@@ -1,23 +1,11 @@
-Yield Strategy
-
-Progressive Decentralization
-
-Liquidity Incentive
-
-Liquidity
-
-Governance
-
 Merkle [Tree, Root]
     Need to have more regarding the rewards structure
 
 Rewards
 
+Rewards Epoch
+
 Make sure 'notional value' makes sense in the blog post
-
-Tokenomics
-
-L2
 
 'Tokenized' (as in tokenized cash flows)
 
@@ -30,8 +18,8 @@ Theta: Time Decay
 Delta: Rate Sensitivity
 Vega
 
-'Principal Token'
-'Yield Token'
+'Principal Token' - zcToken
+'Yield Token' - nToken
 
 Automatic Market Maker (AMM)
 
@@ -66,7 +54,3 @@ NumTicks: The number of liquidity ticks to split your amount into
 ExpiryLength: How often orders should be refreshed (in seconds)
 
 CompoundRateLean: How much your quote should change when Compound’s rate varies (e.g. 1 = 1:1 change in price)
-
-
-## General:
-Capital Efficiency
