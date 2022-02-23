@@ -12,50 +12,40 @@
 Terms are defined within their specified contexts. If encountered in a context but not explicitly re-defined or clarified for that context, the term is assumed to have the Shared Language definition.
 
 Ubiquitous terms that occur within other terms' definitions are indicated using title case and `Markup` formatting.
-
 ## Shared Language
 These terms fulfill the same meaning across the Swivel stack, although any variation or further clarification will be noted within specific contexts.
-
 ### Asset
 A currency, token, or other tradable object. In Swivel, `asset` refers to `Underlying` currency or Tokens.
-
 ### Underlying
 The lending currency of a given `Market`, typically a `Stable Coin` or `Token`.
-
 ### Token
 An `Erc20` compatible token deployed at a given Ethereum Address. May also be referenced as _Erc20_ or _uToken_.
-
 ### nToken
 Swivel's native yield-bearing token, representing the remaining yield potential of the `Underlying` for a given `Market`. For example: `nDAI`, `nUSDC`.
-
 ### zcToken
 Swivel's native principal token, representing the principal lent to a given `Market`. For example: `zcDAI`, `zcUSDC`.
-
 ### Balance
 Amount of the `Underlying` or `Token` assets a given public key owns.
-
 ### Market
 An asset-duration (underlying-duration) pairing that identifies which `Orderbook` / instrument is being used.
-
 ### Maturity
 The duration a given `Market` generates yield, up to a specified date.
-
 ### Volume
-All orders expose an amount which can be filled, wholly or partially, by an `Agreement`. This will be represented by either the `Principal` or `Interest`, depending on whether the order is `Amplified` (deprecated: 'floating') or `Fixed`.
+All orders expose an amount which can be filled, wholly or partially, by an `Order`. This will be represented by either the `Principal` or `Interest`, depending on whether the order is `Amplified` (deprecated: 'floating') or `Fixed`.
 
 ### Yield
-The amount of interest an `Agreement` has generated, expressed in terms of a percentage.
-
+The amount of interest an `Order` has generated, expressed in terms of a percentage.
   
-### Principal
-### Premium
 ### Liquidity Provider
 On Swivel's orderbook-based protocol, Liquidity Providers are `Market Makers`.
 
 ### Liquidity Incentives
 Swivel incentivizes liquidity by providing token rewards only to those `Liquidity Providers` who's orders are `filled`.
 
-
+### Maker
+A person who provides Limit orders to the orderbook.
+### Taker
+A person who executes Market Orders, filling open orderbook orders.
 <hr>
 
 ## UI Language
@@ -91,13 +81,17 @@ Placing an `Order` at a determined price for the given order type and `Market`. 
 ### Position
 The current state of your balance of `Underlying` and `Token` assets, for all active `Markets` you participate in.
 
-_principal and premium definitions need specific breakdowns in order to make a logical mapping to how we are using them in the UI_  
 ### Principal
-Depending on the action taken, Principal in Swivel can either be the original sum committed to the purchase of assets (e.g. purchase 10 DAI worth of Fixed Yield), or the amount of asset sold for a Premium (e.g. sell 10 nDAI for .1089 per nDAI, => 1.089 DAI)
+- Buy Amplified Yield -> Principal is amount of yield exposure (nToken) purchased.
+- Buy Fixed Yield -> Principal is amount of Underlying lent.
+- Sell nToken -> Principal is amount of nToken sold.
+- Sell zcToken -> Principal is amount of zcToken sold.
 
 ### Premium
-Depending on the action taken, Premium can either be the earnings from buying Fixed Yield or the 
-
+- Buy Amplified Yield -> Premium is amount of underlying spent on yield exposure (nToken).
+- Buy Fixed Yield -> Premium is amount of generated yield, expressed in underlying asset.
+- Sell nToken -> Premium is the amount of generated yield, expressed in underlying asset.
+- Sell zcToken -> Premium is price per underlying received when full.
 
 <hr>
 
@@ -108,49 +102,40 @@ These term definitions are understood in the context of Swivel's technical stack
 An Entity, stored off chain.
 UI analogs: *`Order`*, *`Market Order`,* *`Limit Order`*
 #### Order Struct:
-* **Key** - Keccack hash of (wallet address,nonce,time). May also be referred to as _orderKey_ when needed to differentiate from an Agreement's key.
-* **Maker** - Public key of this Order's creator
+* **Key** - Keccack hash of (wallet address,nonce,time). May also be referred to as _orderKey_.
+* **Maker** - Address of this Order's creator
 * **Underlying** - Ethereum address of a deployed Erc20 token
-* **Floating** - Boolean indicating if this order is floating or fixed side
+* **Vault** - Boolean, true if an order interacts with a vault
+* **Exit** - Boolean, tru if the order is an exit operation
 * **Principal** - Volume to be filled in a floating side order. The amount of currency lent at a fixed-rate.
-* **Interest** - Volume to be filled in a fixed side order.  The amount of currency necessary to back a fixed-rate.
-* **Duration** - Timestamp indicating the the length of time this order is valid. Used to calculate an Agreement's release.
+* **Premium** - 
+* **Maturity** - 
 * **Expiry** - Timestamp marking this order's expiration
 
-### Agreement
-An Entity, stored on chain.
-
-#### Agreement Struct:
-* **Key** - Keccack hash of (wallet address,nonce,time). May also be referred to as _AgreementKey_ when needed to differentiate from an Order key.
-* **Maker** - Public key of the creator of an Order this Agreement is filling
-* **Taker** - Public key of this Agreement's creator
-* **Underlying** - Ethereum address of a deployed Erc20 token
-* **Floating** - Boolean indicating if this Agreement is Floating or Fixed side
-* **Released** - Boolean indicating if this Agreement has been released or not
-* **Principal** - Avalailable volume to be filled in a floating side order. When fixed, this amount is determined by the interest / rate.
-* **Interest** - Avalailable volume to be filled in a fixed side order.  When floating this amount is determined by the rate * principal.
-* **Duration** - Timestamp indicating the the length of time this Agreement is valid
-* **Release** - Timestamp marking this Agreement's term maturation. Calculated from the Duration of the Order this is filling
-
-### Taker
-This will be the public key of the owner of any `Agreement` created to fill an `Order`. Taker can be used in combination with other language as a specifier. _Taker volume_ for example, or _Taker side_.
-
-In UI terms a user placing a Market Order is a "Taker".
-
-### Cancelled
+### Valid
+An `Order` is only valid if 
+* non-cancelled, 
+* non-expired, 
+* not-fully-filled and 
+* passes signature validation.
+### Invalid Order
+An order that has been cancelled / filled / expired or insolvent.
+#### Cancelled
 Only an `Order` may be cancelled. If it is, an entry into the on-chain _cancelled_ mapping is stored. No `Agreements` will then be accepted for this order. 
-
-### Cancel Event
-Emitted on chain upon the cancellation of an `Order` with the `Order`'s key.
-
-### Expired
-An Order which has aged past its Duration. Like a cancelled Order, it may no longer be filled by an Agreement.
-
+#### Full
+The order has been filled in entirety but one or more fills.
+#### Insolvent
+If an order is placed and the underlying assets are subsequently not available, the order is marked as insolvent.
+#### Expired
+An Order which has aged past its Duration. Like a cancelled Order, it may no longer be filled.
+### Event
+An observable occurance that is recorded either on-chain or off-chain in Swivel's event store.
+### Message
+A visible message that is sent from an event store that can be listened for by a user or service.
 ### Signature
 As ECDSA cryptographic signature following the EIP-712 standard which we use to verify the authenticity of an `Order`. You will see the `Components` of a Signature (V, R, and S) used throughout the protocol. The Hash and Sig solidity libraries exist to service this functionality. It should be noted and enforced that `Components` are derived from a `Signature` and that the two are not equivalent. a `Signature` is a 64-bytes and its derived `Components` are a _tuple_ of length 3 consisting of two 32-bytes, the canonical _R_ and _S_,  and a single uint _V_.
 
 An Order's signature is considered `valid` if the extracted public key matches that of the maker.
-
 ### EIP-712 Domain
 Mentioned here as the term `Domain` has very specific Domain Driven Design implications. You may see or hear the term domain intermingled with other verbage for the EIP-712 standard such as:
 * TypeHash
@@ -160,38 +145,28 @@ Mentioned here as the term `Domain` has very specific Domain Driven Design impli
 Any use of these terms, specifically _domain_ should be prefixed with EIP-712 to prevent language degradation and the confusion that follows it.
 
 Implementation of Signature and Components are each tightly coupled to the EIP-712 standard.
-
-### Valid
-An `Order` is only valid if 
-* non-cancelled, 
-* non-expired, 
-* not-fully-filled and 
-* passes signature validation.
-
 ### Initiate Event
 Emitted on chain upon the establishment of any `Agreement`. Publishes both `OrderKey` and `AgreementKey`
-
 ### Release Event
 Emitted on chain upon the release of an Agreement. Publishes OrderKey and AgreementKey
-
 ### Approve
 Terms such as approve and approval(s) when referencing specific functionality of the `Underlying` token. Use specifiers to avoid confusion with the compound token if needed. _underlying approval_ for example.
-
 ### Transfer
 Terms such as transfer, transfers  and transfer from when referencing specific functionality of the `Underlying` token. As with approve, specify which token if necessary, _uToken transfer_ etc...
-
 ### Side
 Indicates whether the bond is `fixed` and is lending `principal`, or is `floating` and is paying `interest`.
-
 ### Exit
 Boolean value indicating that an `Order` is Selling `nTokens` of `zcTokens` back to the `Orderbook`.
-
 ### Vault
-
-
+An on-chain contract that tracks the token balances for a given market for a given user.
+### Event Store
+The saved stream of order event data 
+### Event Sourcing
+The data strategy for storing and retrieving events from the event store.
+### Messages
+Messages are published with predefined meanings that are used to observe the occurance of events.
 ### Initiate
 Boolean value indicating that an order is `Lending` new `Underlying` assets to the protocol, minting new `nTokens` and `zcTokens` into the `Vault`.
-
 ### Rate (Effective Rate)
 The bond's (deprecated?) effective rate, averaged across each agreement. Depending on whether the bond is `fixed` or `floating` (UI: '`amplified`)', effective rate is calculated with respect to either `principal` or `interest`.
 
@@ -207,16 +182,12 @@ If (`agreement floating` == false) {
 
 ### Deployments
 The Swivel development team has a number of deploys for Production, Staging, and Development.
-
 #### Production
 The product deployment. This is used for all live user-facing deployments on any given chain or L2. e.g. `production.swivel.exchange` (updated from previous lang `mainnet.swivel.exchange`)
-
 #### Staging
 The staging deployment is a our advertised test net. Reflects promises about being a mirror of production, but without real money risk. It should be stable and function exactly like production. E.g. `staging.swivel.exchange` (updated from previous lang `rinkeby.swivel.exchange`)
-
 #### Development
 The Development deployment is a private, non-public facing Testnet version of the product. It has no promises about functionlity and will frequently break. E.g. `development.swivel.exchange`.
-
 
 <hr>
 
