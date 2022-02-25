@@ -167,19 +167,10 @@ The data strategy for storing and retrieving events from the event store.
 Messages are published with predefined meanings that are used to observe the occurance of events.
 ### Initiate
 Boolean value indicating that an order is `Lending` new `Underlying` assets to the protocol, minting new `nTokens` and `zcTokens` into the `Vault`.
-### Rate (Effective Rate)
-The bond's (deprecated?) effective rate, averaged across each agreement. Depending on whether the bond is `fixed` or `floating` (UI: '`amplified`)', effective rate is calculated with respect to either `principal` or `interest`.
-
-Calculated as the sum of each agreement's ( `agreement volume` / `bond volume` ) * `agreement rate` )
-
-e.g. 
-
-If (`agreement floating` == false) {
-
-   effectiveRate = SUM(`agreement principal`/`bond volume`) * `agreement principal`)
-  
-}
-
+### Principal
+The amount of nTokens traded.
+### Premium
+The amount of underlying paid.
 ### Deployments
 The Swivel development team has a number of deploys for Production, Staging, and Development.
 #### Production
