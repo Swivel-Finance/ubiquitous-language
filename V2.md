@@ -124,6 +124,8 @@ An order that has been cancelled / filled / expired or insolvent.
 Only an `Order` may be cancelled. If it is, an entry into the on-chain _cancelled_ mapping is stored. No `Agreements` will then be accepted for this order. 
 #### Full
 The order has been filled in entirety but one or more fills.
+#### Temporarily Insolvent
+When an order is placed that uses a Vault's entire balance, Swivel will conduct a secondary check for solvency to ensure that no insolvent orders enter the orderbook. During this intermediary period, the order will be marked as _temporarily insolvent_.
 #### Insolvent
 If an order is placed and the underlying assets are subsequently not available, the order is marked as insolvent.
 #### Expired
