@@ -76,7 +76,7 @@ You can sell your `nTokens` or `zcTokens` back to the `Orderbook` at any time wi
 Placing an `Order` as a `Taker`, transacting at the best available price on the `Orderbook`.
 
 ### Limit Order
-Placing an `Order` at a determined price for the given order type and `Market`. `Valid`, unfilled `Limit Orders` appear in your Open Limit Orders view. Depending on `Order` size and `Orderbook` volume, Limit Orders may be filled partially over an undetermined amount of time.
+Placing an `Order` as a `Maker`, transacting at a determined price for the given order type and `Market`. `Valid` unfilled `Limit Orders` appear in your Open Limit Orders view. Depending on `Order` size and `Orderbook` volume, Limit Orders may be filled partially over an undetermined amount of time.
 
 ### Position
 The current state of your balance of `Underlying` and `Token` assets, for all active `Markets` you participate in.
@@ -102,30 +102,37 @@ These term definitions are understood in the context of Swivel's technical stack
 An Entity, stored off chain.
 UI analogs: *`Order`*, *`Market Order`,* *`Limit Order`*
 #### Order Struct:
-* **Key** - Keccack hash of (wallet address,nonce,time). May also be referred to as _orderKey_.
-* **Maker** - Address of this Order's creator
-* **Underlying** - Ethereum address of a deployed Erc20 token
-* **Vault** - Boolean, true if an order interacts with a vault
-* **Exit** - Boolean, tru if the order is an exit operation
-* **Principal** - Volume to be filled in a floating side order. The amount of currency lent at a fixed-rate.
-* **Premium** - 
-* **Maturity** - 
-* **Expiry** - Timestamp marking this order's expiration
+* **Key** - `bytes32` Keccack hash of (wallet address,nonce,time). May also be referred to as _orderKey_.
+* **Maker** - `address` Address of this Order's creator
+* **Underlying** - `address` Ethereum address of a deployed Erc20 token
+* **Vault** - `bool` Boolean, true if an order interacts with a vault
+* **Exit** - `bool` Boolean, true if the order is an exit operation
+* **Principal** - `uint256` The amount of nTokens traded.
+* **Premium** - `uint256` The amount of underlying paid.
+* **Maturity** - `uint256` The maturity date of the market in seconds since epoch.
+* **Expiry** - `uint256` Timestamp marking this order's expiration
 
 ### Valid
 An `Order` is only valid if 
 * non-cancelled, 
 * non-expired, 
-* not-fully-filled and 
-* passes signature validation.
+* not-fully-filled
+* passes signature validation
+* not temporarily insolvent
+* not insolvent
 ### Invalid Order
-An order that has been cancelled / filled / expired or insolvent.
+An order that is 
+* cancelled
+* filled
+* expired
+* temporarily insolvent
+* insolvent
 #### Cancelled
-Only an `Order` may be cancelled. If it is, an entry into the on-chain _cancelled_ mapping is stored. No `Agreements` will then be accepted for this order. 
+Only an `Order` may be cancelled. If it is, an entry into the on-chain _cancelled_ mapping is stored. No `Fills` will then be accepted for this order. 
 #### Full
-The order has been filled in entirety but one or more fills.
+The order has been filled in its entirety.
 #### Temporarily Insolvent
-When an order is placed that uses a Vault's entire balance, Swivel will conduct a secondary check for solvency to ensure that no insolvent orders enter the orderbook. During this intermediary period, the order will be marked as _temporarily insolvent_.
+If a wallet's available balance is equal to an `Order`s amount, Swivel enforces a solvency check. During this intermediary period, the order will be marked as _temporarily insolvent_.
 #### Insolvent
 If an order is placed and the underlying assets are subsequently not available, the order is marked as insolvent.
 #### Expired
@@ -133,7 +140,7 @@ An Order which has aged past its Duration. Like a cancelled Order, it may no lon
 ### Event
 An observable occurance that is recorded either on-chain or off-chain in Swivel's event store.
 ### Message
-A visible message that is sent from an event store that can be listened for by a user or service.
+A visible message about an `Event` that is sent from Swivel and can be listened for by a user or service.
 ### Signature
 As ECDSA cryptographic signature following the EIP-712 standard which we use to verify the authenticity of an `Order`. You will see the `Components` of a Signature (V, R, and S) used throughout the protocol. The Hash and Sig solidity libraries exist to service this functionality. It should be noted and enforced that `Components` are derived from a `Signature` and that the two are not equivalent. a `Signature` is a 64-bytes and its derived `Components` are a _tuple_ of length 3 consisting of two 32-bytes, the canonical _R_ and _S_,  and a single uint _V_.
 
@@ -147,32 +154,18 @@ Mentioned here as the term `Domain` has very specific Domain Driven Design impli
 Any use of these terms, specifically _domain_ should be prefixed with EIP-712 to prevent language degradation and the confusion that follows it.
 
 Implementation of Signature and Components are each tightly coupled to the EIP-712 standard.
-### Initiate Event
-Emitted on chain upon the establishment of any `Agreement`. Publishes both `OrderKey` and `AgreementKey`
-### Release Event
-Emitted on chain upon the release of an Agreement. Publishes OrderKey and AgreementKey
 ### Approve
 Terms such as approve and approval(s) when referencing specific functionality of the `Underlying` token. Use specifiers to avoid confusion with the compound token if needed. _underlying approval_ for example.
 ### Transfer
 Terms such as transfer, transfers  and transfer from when referencing specific functionality of the `Underlying` token. As with approve, specify which token if necessary, _uToken transfer_ etc...
 ### Side
 Indicates whether the bond is `fixed` and is lending `principal`, or is `floating` and is paying `interest`.
-### Exit
-Boolean value indicating that an `Order` is Selling `nTokens` of `zcTokens` back to the `Orderbook`.
-### Vault
-An on-chain contract that tracks the token balances for a given market for a given user.
 ### Event Store
-The saved stream of order event data 
+An Ordered, Persisted, Immutable record of event data.
 ### Event Sourcing
 The data strategy for storing and retrieving events from the event store.
 ### Messages
 Messages are published with predefined meanings that are used to observe the occurance of events.
-### Initiate
-Boolean value indicating that an order is `Lending` new `Underlying` assets to the protocol, minting new `nTokens` and `zcTokens` into the `Vault`.
-### Principal
-The amount of nTokens traded.
-### Premium
-The amount of underlying paid.
 ### Deployments
 The Swivel development team has a number of deploys for Production, Staging, and Development.
 #### Production
